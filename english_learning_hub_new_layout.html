@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Quest</title>
+<style>
+:root{
+  --bg:#f7f4ee;--paper:#fffdf8;--ink:#263238;--muted:#6b7477;
+  --orange:#ef8354;--yellow:#f4c95d;--green:#5b8e7d;--blue:#4d7ea8;
+  --line:#e7ded1;--shadow:0 12px 30px rgba(61,47,35,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+button,input{font:inherit}button{cursor:pointer}
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+.sidebar{background:#263238;color:white;padding:28px 20px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:35px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--yellow);color:#263238;display:grid;place-items:center;font-weight:900;font-size:20px}
+.brand h1{font-size:19px;margin:0}.brand small{color:#b9c3c5}
+.menu{display:grid;gap:8px}.menu button{border:0;background:transparent;color:#cbd4d6;padding:13px 14px;border-radius:12px;text-align:left;font-weight:650}
+.menu button:hover,.menu button.active{background:#39494f;color:#fff}
+.side-note{position:absolute;left:20px;right:20px;bottom:25px;background:#33444a;border-radius:18px;padding:17px}
+.side-note strong{font-size:24px}.mini-bar{height:7px;background:#506066;border-radius:9px;margin:10px 0}.mini-bar i{display:block;height:100%;width:0;background:var(--yellow);border-radius:9px}
+main{padding:34px;max-width:1450px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.top h2{margin:0;font-size:29px}.top p{margin:5px 0;color:var(--muted)}
+.theme{border:1px solid var(--line);background:var(--paper);border-radius:13px;padding:11px 14px;box-shadow:var(--shadow)}
+.section{display:none}.section.active{display:block}
+.welcome{display:grid;grid-template-columns:1.35fr .65fr;gap:20px;margin-bottom:22px}
+.hero{background:var(--orange);color:white;border-radius:28px;padding:34px;min-height:260px;position:relative;overflow:hidden}
+.hero:after{content:"✦";position:absolute;right:30px;bottom:-20px;font-size:180px;color:rgba(255,255,255,.12)}
+.hero h1{font-size:40px;line-height:1.05;margin:0 0 13px;max-width:600px}
+.hero p{max-width:570px;line-height:1.65;color:#fff5ef}
+.cta{border:0;background:#263238;color:white;padding:12px 17px;border-radius:12px;font-weight:800}
+.word-card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:var(--shadow)}
+.word-card .label{color:var(--green);font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1px}
+.word-card .word{font-size:42px;font-weight:900;margin:25px 0 5px}.word-card p{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 8px}.card p{color:var(--muted);line-height:1.55}
+.icon{font-size:28px;margin-bottom:13px}
+.section-title{display:flex;justify-content:space-between;align-items:end;margin:10px 0 16px}.section-title h2{margin:0;font-size:27px}.section-title p{margin:4px 0;color:var(--muted)}
+.lesson-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.lesson{display:grid;grid-template-columns:55px 1fr auto;gap:14px;align-items:center}
+.lesson-icon{width:55px;height:55px;border-radius:16px;background:#f8e5d9;display:grid;place-items:center;font-size:25px}
+.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#edf3f0;color:#3f6f60;font-size:11px;font-weight:800}
+.btn{border:0;background:var(--blue);color:#fff;padding:10px 14px;border-radius:10px;font-weight:750}.btn.green{background:var(--green)}
+.progress{height:8px;background:#eee5da;border-radius:10px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;width:0;background:var(--green)}
+.vocab{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.flash{min-height:300px;display:grid;place-items:center;text-align:center;background:var(--yellow);border-radius:25px;padding:30px;cursor:pointer}
+.flash .big{font-size:54px;font-weight:950}.flash small{font-weight:800;color:#66531d}
+.choices{display:grid;gap:10px;margin-top:15px}.choice{border:1px solid var(--line);background:#fff;padding:13px;border-radius:12px;text-align:left}.choice:hover{border-color:var(--orange)}
+.feedback{font-weight:800;min-height:25px}
+.rule{background:#eef4f1;border-left:5px solid var(--green);padding:16px;border-radius:12px;margin:15px 0}
+.example{background:#f8eee8;padding:12px;border-radius:12px;margin:8px 0}
+.exercise{display:grid;gap:10px}.exercise button{text-align:left}
+.quiz{max-width:850px;margin:auto}.quiz-head{display:flex;justify-content:space-between;color:var(--muted)}
+.question{font-size:24px;font-weight:850;margin:25px 0}.quiz-options{display:grid;gap:10px}
+.speak-row{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid var(--line)}
+.speak-row button{width:46px;height:46px;border:0;border-radius:50%;background:#edf3f0}
+input.text{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#fff}
+.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:13px;border-bottom:1px solid var(--line)}
+.badge{padding:6px 9px;border-radius:99px;background:#edf7ef;color:#38714a;font-weight:800;font-size:12px}
+footer{text-align:center;color:var(--muted);padding:30px}
+.mobile{display:none}
+@media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}.welcome{grid-template-columns:1fr}.lesson-list{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .layout{display:block}.sidebar{position:fixed;z-index:20;left:-280px;width:270px;transition:.25s}.sidebar.open{left:0}.mobile{display:inline-block}
+ main{padding:18px}.top h2{font-size:23px}.hero h1{font-size:32px}.grid,.vocab{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">EQ</div><div><h1>English Quest</h1><small>Learn by doing</small></div></div>
+  <nav class="menu">
+    <button class="active" data-page="home">🏡 Home Base</button>
+    <button data-page="lessons">🗺️ Learning Path</button>
+    <button data-page="words">💬 Word Lab</button>
+    <button data-page="grammar">🧩 Grammar Quest</button>
+    <button data-page="quiz">🏆 Challenge</button>
+    <button data-page="speaking">🎙️ Speak Up</button>
+    <button data-page="progress">📌 My Journey</button>
+  </nav>
+  <div class="side-note">
+    <small>Quest progress</small>
+    <div class="mini-bar"><i id="sideProgress"></i></div>
+    <strong id="sidePct">0%</strong>
+  </div>
+</aside>
+
+<main>
+<div class="top">
+  <div><button class="theme mobile" onclick="toggleMenu()">☰</button> <h2 style="display:inline">Your English Quest</h2><p>Small practice today, stronger English tomorrow.</p></div>
+  <button class="theme" onclick="toggleTheme()">☀️ Change view</button>
+</div>
+
+<section id="home" class="section active">
+  <div class="welcome">
+    <div class="hero">
+      <h1>Turn English practice into a daily adventure.</h1>
+      <p>Explore new words, solve grammar missions, practice conversations, and collect points as you learn.</p>
+      <button class="cta" onclick="showPage('lessons')">Enter the Learning Path →</button>
+    </div>
+    <div class="word-card">
+      <div class="label">Word of the day</div>
+      <div class="word">resourceful</div>
+      <p><b>Meaning:</b> good at finding clever ways to solve problems.</p>
+      <div class="example">“She is resourceful when she faces a difficult task.”</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="icon">🧭</div><h3>Learning Path</h3><p>Follow short missions from basic communication to confident English use.</p><button class="btn" onclick="showPage('lessons')">Explore</button></div>
+    <div class="card"><div class="icon">🧠</div><h3>Word Lab</h3><p>Discover useful words through meaning, examples, and quick choices.</p><button class="btn green" onclick="showPage('words')">Open Lab</button></div>
+    <div class="card"><div class="icon">🎤</div><h3>Speak Up</h3><p>Listen to natural phrases and practice saying them aloud.</p><button class="btn" onclick="showPage('speaking')">Practice</button></div>
+  </div>
+</section>
+
+<section id="lessons" class="section">
+ <div class="section-title"><div><h2>Learning Path</h2><p>Complete missions and earn 10 points each.</p></div></div>
+ <div class="lesson-list" id="lessonList"></div>
+</section>
+
+<section id="words" class="section">
+ <div class="section-title"><div><h2>Word Lab</h2><p>Flip the card, then choose the closest meaning.</p></div></div>
+ <div class="vocab">
+  <div class="flash" onclick="flipWord()"><div id="flash"><small>WORD</small><div class="big">adapt</div><p>Tap to reveal the meaning</p></div></div>
+  <div class="card"><span class="pill">Vocabulary Mission</span><h3 id="wordTitle">adapt</h3><p>Which meaning is closest?</p><div class="choices" id="choices"></div><p class="feedback" id="wordFeedback"></p><button class="btn" onclick="nextWord()">Next word</button></div>
+ </div>
+</section>
+
+<section id="grammar" class="section">
+ <div class="section-title"><div><h2>Grammar Quest</h2><p>Learn one useful rule, then complete the mission.</p></div></div>
+ <div class="card">
+  <h3>Using “because” and “so”</h3>
+  <p>Use <b>because</b> to give a reason. Use <b>so</b> to show a result.</p>
+  <div class="rule"><b>Reason:</b> I stayed home <b>because</b> it was raining.<br><b>Result:</b> It was raining, <b>so</b> I stayed home.</div>
+  <h3>Mission</h3><p>Choose the sentence that correctly gives a reason.</p>
+  <div class="exercise">
+   <button class="choice" onclick="grammar(this,false)">I was tired, so I slept early.</button>
+   <button class="choice" onclick="grammar(this,true)">I slept early because I was tired.</button>
+   <button class="choice" onclick="grammar(this,false)">Because I was tired, so I slept early.</button>
+  </div>
+  <p class="feedback" id="grammarFeedback"></p>
+ </div>
+</section>
+
+<section id="quiz" class="section">
+ <div class="section-title"><div><h2>English Challenge</h2><p>Five questions. Ten points for each correct answer.</p></div></div>
+ <div class="card quiz">
+  <div class="quiz-head"><span id="qNum">Challenge 1 / 5</span><span>Points: <b id="qScore">0</b></span></div>
+  <div class="progress"><i id="qBar" style="width:20%"></i></div>
+  <div class="question" id="question"></div><div class="quiz-options" id="quizOptions"></div>
+  <p class="feedback" id="quizFeedback"></p><button class="btn" id="nextBtn" onclick="nextQ()" style="display:none">Next mission →</button>
+ </div>
+</section>
+
+<section id="speaking" class="section">
+ <div class="section-title"><div><h2>Speak Up Studio</h2><p>Listen first, then repeat the phrase aloud.</p></div></div>
+ <div class="card">
+  <div class="speak-row"><div><b>Could you say that again, please?</b><p>Use this when you did not hear someone clearly.</p></div><button onclick="speak('Could you say that again, please?')">🔊</button></div>
+  <div class="speak-row"><div><b>In my opinion, this is a good idea.</b><p>Use this to politely share your opinion.</p></div><button onclick="speak('In my opinion, this is a good idea.')">🔊</button></div>
+  <div class="speak-row"><div><b>Let me think about it.</b><p>Use this when you need a little time before answering.</p></div><button onclick="speak('Let me think about it.')">🔊</button></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Hear your own word</h3><p>Type a word or sentence and press listen.</p><input class="text" id="speakInput" placeholder="Example: I enjoy learning English."><br><br><button class="btn" onclick="speak(document.getElementById('speakInput').value)">🔊 Listen</button></div>
+</section>
+
+<section id="progress" class="section">
+ <div class="section-title"><div><h2>My Journey</h2><p>See how far you have traveled.</p></div></div>
+ <div class="grid">
+  <div class="card"><div class="icon">⭐</div><h3 id="points">0</h3><p>Total points</p></div>
+  <div class="card"><div class="icon">🗺️</div><h3 id="done">0</h3><p>Missions completed</p></div>
+  <div class="card"><div class="icon">📈</div><h3 id="pct">0%</h3><p>Path completed</p></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>Mission Checklist</h3><table class="table"><thead><tr><th>Mission</th><th>Status</th></tr></thead><tbody id="checklist"></tbody></table><br><button class="btn" onclick="resetAll()">Reset Journey</button></div>
+</section>
+<footer>English Quest • Explore • Practice • Grow 🌱</footer>
+</main>
+</div>
+
+<script>
+const state=JSON.parse(localStorage.getItem('englishQuest')||'{"done":[],"points":0}');
+const missions=[
+ ['👋','Starter','Meeting Someone','Practice introductions and friendly questions.'],
+ ['🛒','Everyday','Shopping Talk','Learn useful phrases for asking about prices and choices.'],
+ ['📅','Everyday','Making Plans','Talk about plans, schedules, and invitations.'],
+ ['🧭','Travel','Asking for Directions','Use simple questions to find a place.'],
+ ['💼','Communication','Polite Requests','Make requests clearly and respectfully.'],
+ ['✉️','Writing','Short Messages','Write a clear message with a greeting and purpose.']
+];
+function save(){localStorage.setItem('englishQuest',JSON.stringify(state));updateUI()}
+function showPage(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.menu button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.getElementById('sidebar').classList.remove('open');scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.menu button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
+function toggleTheme(){document.body.classList.toggle('alt');document.body.style.background=document.body.classList.contains('alt')?'#eef3f5':'var(--bg)'}
+function renderMissions(){document.getElementById('lessonList').innerHTML=missions.map((m,i)=>`<div class="card lesson"><div class="lesson-icon">${m[0]}</div><div><span class="pill">${m[1]}</span><h3>${m[2]}</h3><p>${m[3]}</p></div>${state.done.includes(i)?'<span class="badge">✓ Done</span>':`<button class="btn" onclick="completeMission(${i})">Complete</button>`}</div>`).join('')}
+function completeMission(i){if(!state.done.includes(i)){state.done.push(i);state.points+=10;save();renderMissions()}}
+const words=[
+ ['adapt','to change your actions or ideas to fit a new situation','to adjust','to forget','to complain'],
+ ['reliable','able to be trusted or depended on','trustworthy','expensive','careless'],
+ ['brief','short in time or length','short','difficult','noisy'],
+ ['encourage','to give someone confidence or support','to support','to confuse','to avoid'],
+ ['accurate','correct and free from mistakes','correct','creative','quick']
+];
+let wi=0,flipped=false;
+function renderWord(){let w=words[wi];document.getElementById('wordTitle').textContent=w[0];document.getElementById('wordFeedback').textContent='';document.getElementById('flash').innerHTML=`<small>WORD</small><div class="big">${flipped?w[1]:w[0]}</div><p>${flipped?'Tap to see the word':'Tap to reveal the meaning'}</p>`;let a=[w[2],w[3],w[4]].sort(()=>Math.random()-.5);document.getElementById('choices').innerHTML=a.map(x=>`<button class="choice" onclick="wordAnswer(this,${JSON.stringify(x)})">${x}</button>`).join('')}
+function flipWord(){flipped=!flipped;renderWord()}
+function wordAnswer(btn,x){let w=words[wi];document.querySelectorAll('#choices button').forEach(b=>b.disabled=true);if(x===w[1]){btn.style.background='#edf7ef';document.getElementById('wordFeedback').textContent='✓ Correct! +5 points';state.points+=5}else{btn.style.background='#fff0ed';document.getElementById('wordFeedback').textContent='Keep learning. Correct meaning: '+w[1]}save()}
+function nextWord(){wi=(wi+1)%words.length;flipped=false;renderWord()}
+function grammar(btn,correct){document.querySelectorAll('#grammar .choice').forEach(b=>b.disabled=true);btn.style.background=correct?'#edf7ef':'#fff0ed';document.getElementById('grammarFeedback').textContent=correct?'✓ Correct! “Because” introduces the reason.':'Try again. Look for the sentence where “because” introduces the reason.';if(correct){state.points+=5;save()}}
+const qs=[
+ ['Which sentence is a polite request?',['Give me your pen.','Could you lend me your pen, please?','You give pen.','Pen now.'],1],
+ ['Choose the correct past-tense sentence.',['I visit my friend yesterday.','I visited my friend yesterday.','I visiting my friend yesterday.','I visits my friend yesterday.'],1],
+ ['What does “reliable” mean?',['Easy to break','Able to be trusted','Very expensive','Hard to understand'],1],
+ ['Which phrase is used to ask for clarification?',['See you later.','Could you explain that?','I am hungry.','Nice weather.'],1],
+ ['Choose the correct sentence.',['She can speaks English.','She can speaking English.','She can speak English.','She can spoke English.'],2]
+];
+let qi=0,qscore=0,answered=false;
+function renderQuiz(){let q=qs[qi];answered=false;document.getElementById('qNum').textContent=`Challenge ${qi+1} / ${qs.length}`;document.getElementById('qBar').style.width=((qi+1)/qs.length*100)+'%';document.getElementById('question').textContent=q[0];document.getElementById('quizOptions').innerHTML=q[1].map((x,i)=>`<button class="choice" onclick="answerQ(this,${i})">${x}</button>`).join('');document.getElementById('quizFeedback').textContent='';document.getElementById('nextBtn').style.display='none'}
+function answerQ(btn,i){if(answered)return;answered=true;let q=qs[qi];document.querySelectorAll('#quizOptions .choice').forEach((b,j)=>{if(j===q[2])b.style.background='#edf7ef'});if(i===q[2]){qscore+=10;state.points+=10;document.getElementById('quizFeedback').textContent='✓ Correct!'}else{btn.style.background='#fff0ed';document.getElementById('quizFeedback').textContent='Not quite. The correct answer is highlighted.'}document.getElementById('qScore').textContent=qscore;document.getElementById('nextBtn').style.display='inline-block';save()}
+function nextQ(){if(qi<qs.length-1){qi++;renderQuiz()}else{document.getElementById('quizFeedback').textContent=`Challenge complete! You earned ${qscore} points.`;document.getElementById('nextBtn').textContent='Try again';document.getElementById('nextBtn').onclick=()=>{qi=0;qscore=0;document.getElementById('nextBtn').textContent='Next mission →';document.getElementById('nextBtn').onclick=nextQ;renderQuiz()}}}
+function speak(t){if(!t)return;if('speechSynthesis' in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}}
+function updateUI(){let p=Math.round(state.done.length/missions.length*100);document.getElementById('sideProgress').style.width=p+'%';document.getElementById('sidePct').textContent=p+'%';document.getElementById('points').textContent=state.points;document.getElementById('done').textContent=state.done.length;document.getElementById('pct').textContent=p+'%';document.getElementById('checklist').innerHTML=missions.map((m,i)=>`<tr><td>${m[0]} ${m[2]}</td><td>${state.done.includes(i)?'<span class="badge">Completed</span>':'Not completed'}</td></tr>`).join('')}
+function resetAll(){if(confirm('Reset your English Quest progress?')){localStorage.removeItem('englishQuest');location.reload()}}
+renderMissions();renderWord();renderQuiz();updateUI();
+</script>
+</body>
+</html>
